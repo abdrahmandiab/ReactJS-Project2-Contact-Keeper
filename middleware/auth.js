@@ -1,7 +1,7 @@
 //middleware is just a function that has access to
 //the request and respone objects
 
-const jwt = require("json webtoken");
+const jwt = require("jsonwebtoken");
 const config = require("config");
 
 module.exports = function (req, res, next) {

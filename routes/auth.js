@@ -1,5 +1,6 @@
 const express = require("express");
 const config = require("config");
+const auth = require("../middleware/auth");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -9,8 +10,15 @@ const User = require("../models/User");
 // @route   GET api/auth
 // @desc    Get logged in user
 // @access  Private
-router.get("/", (req, res) => {
-  res.send("Get logged in user");
+router.get("/", auth, async (req, res) => {
+  // when we include auth as a second parameter, middleware/auth.js is run
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 // @route   POST api/auth
